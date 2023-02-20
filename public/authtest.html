@@ -1,0 +1,139 @@
+<head>
+  <meta charset="utf-8" />
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+  function move(sysNm) {
+    var id = document.testForm.TEST_USER_ID.value;
+    var ip = document.testForm.TEST_USER_ID.value;
+    var org = document.testForm.TEST_USER_ID.value;
+
+    systemPopup(sysNm, id, ip, org);
+  }
+  //시스템 연동
+  function systemPopup(sysNm, id, ip, org) {
+    var bmisUrl = "http://boss.kt.com";
+
+    var gisUrl = "http://10.220.231.59:8080/api/v1/jwt/auth";
+    // //var gisUrl = "http://10.220.230.193/api/v1/jwt/auth";
+    // var gisUrl = "https://ownview.kt.co.kr/api/v1/jwt/auth";
+
+    var devUrl = "http://localhost:8080/api/v1/jwt/auth";
+    var openUrl = "http://10.203.13.204:8242/api/v1/jwt/auth";
+    var tdvUrl = "https://dv.baikal.kt.co.kr:9502/directory";
+    var gisForm = document.gisForm;
+    var popId = "";
+    var leftPosition = screen.width
+      ? (screen.width - (screen.availWidth - 50)) / 2
+      : 0;
+    var topPosition = screen.height
+      ? (screen.height - (screen.availHeight - 50)) / 2
+      : 0;
+
+    if (sysNm == "BMIS") {
+      window.open(
+        bmisUrl,
+        "bmis",
+        "width=1080px,height=960px,resizable=yes,scrollbars=yes"
+      );
+    } else if (sysNm == "TDV") {
+      window.open(
+        tdvUrl,
+        "tdv",
+        "width=1080px,height=960px,resizable=yes,scrollbars=yes"
+      );
+    } else if (sysNm == "DEV") {
+      gisForm.action = devUrl;
+      gisForm.method = "post";
+      gisForm.target = "gisPop";
+
+      $("input:hidden[name=VOC_USER_ID]").val(id);
+      $("input:hidden[name=VOC_CLIENT_IP]").val(ip);
+      $("input:hidden[name=VOC_ORG_NM]").val(org);
+
+      gisForm.submit();
+    } else if (sysNm == "OPEN") {
+      gisForm.action = openUrl;
+      gisForm.method = "post";
+      gisForm.target = "gisPop";
+
+      $("input:hidden[name=VOC_USER_ID]").val(id);
+      $("input:hidden[name=VOC_CLIENT_IP]").val(ip);
+      $("input:hidden[name=VOC_ORG_NM]").val(org);
+
+      gisForm.submit();
+    } else {
+      window.open(
+        "",
+        "gisPop",
+        "width=" +
+          (screen.availWidth - 50) +
+          ",height=" +
+          (screen.availHeight - 50) +
+          ",left=" +
+          leftPosition +
+          ",top=" +
+          topPosition +
+          ",resizable=yes"
+      );
+      gisForm.action = gisUrl;
+      gisForm.method = "post";
+      gisForm.target = "gisPop";
+
+      $("input:hidden[name=VOC_USER_ID]").val(id);
+      $("input:hidden[name=VOC_CLIENT_IP]").val(ip);
+      $("input:hidden[name=VOC_ORG_NM]").val(org);
+
+      gisForm.submit();
+    }
+  }
+</script>
+
+<body>
+  <a
+    href="#"
+    onclick="systemPopup('GIS','f02f43e267b8eaaad45172836dd462fb','57491f502ac1767e0d69f321f62bf7e9','57491f502ac1767e0d69f321f62bf7e9');"
+    id="menu_"
+  >
+    - 김아영(개발서버) </a
+  ><br />
+  <a
+    href="#"
+    onclick="systemPopup('GIS','bad17f8adc8273a0eacf8e811ee70307','bad17f8adc8273a0eacf8e811ee70307','bad17f8adc8273a0eacf8e811ee70307');"
+    id="menu_"
+  >
+    - choi(개발서버) </a
+  ><br />
+  <br /><br />
+  <br /><br />
+
+  <a
+    href="#"
+    onclick="systemPopup('DEV','f02f43e267b8eaaad45172836dd462fb','8f306967b5018c91fb187d15e5774b0c','57491f502ac1767e0d69f321f62bf7e9');"
+    id="menu_"
+  >
+    - 김아영(localhost) </a
+  ><br />
+  <a
+    href="#"
+    onclick="systemPopup('DEV','bad17f8adc8273a0eacf8e811ee70307','8f306967b5018c91fb187d15e5774b0c','bad17f8adc8273a0eacf8e811ee70307');"
+    id="menu_"
+  >
+    - choi(localhost) </a
+  ><br />
+  <br /><br />
+  <br /><br />
+  <form name="gisForm" action="">
+    <input type="hidden" name="VOC_USER_ID" value="" />
+    <input type="hidden" name="VOC_CLIENT_IP" value="" />
+    <input type="hidden" name="VOC_ORG_NM" value="" />
+  </form>
+
+  <form name="testForm" action="">
+    enc사번입력: <input type="text" name="TEST_USER_ID" value="" /><br />
+    <a href="javascript:move('DEV');">로컬</a><br />
+    <a href="javascript:move('OWN');">ownview.kt.co.kr</a><br />
+    <a href="javascript:move('OPEN');">10.203.13.204</a><br />
+  </form>
+</body>
